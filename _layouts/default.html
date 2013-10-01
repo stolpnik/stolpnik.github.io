@@ -6,45 +6,39 @@
         <title>{{ page.title }}</title>
         <meta name="viewport" content="width=device-width">
 
-        <!-- build:css({app,.tmp}) /styles/main.css -->
-        <!-- Syntax highlighting CSS -->
-        <link rel="stylesheet" href="/styles/syntax.css">
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
 
         <!-- Custom CSS -->
-        <link rel="stylesheet" href="/styles/main.css">
-        <!-- endbuild -->
+        <link rel="stylesheet" href="/css/main.css">
 
     </head>
     <body>
 
-        <div class="container">
-          <div class="site">
-            <div class="header">
-              <h1 class="title"><a href="/">{{ site.name }}</a></h1>
-              <a class="extra" href="/">home</a>
+        <div class="site">
+          <div class="header">
+            <h1 class="title"><a href="/">{{ site.name }}</a></h1>
+            <a class="extra" href="/">home</a>
+          </div>
+
+          {{ content }}
+
+          <div class="footer">
+            <div class="contact">
+              <p>
+                Your Name<br />
+                What You Are<br />
+                you@example.com
+              </p>
             </div>
-
-                {{ content }}
-
-            <div class="footer">
-              <div class="contact">
-                <p>
-                  stolpnik<br />
-                  <a href="mailto:jo@jo.com">jo@jo.com</a>
-                </p>
-              </div>
-              <div class="contact">
-                <p>
-                  <a href="http://github.com/stolpnik/">github.com/stolpnik</a><br />
-                  <a href="http://twitter.com/jojojojo/">twitter.com/jojojojo</a><br />
-                </p>
-              </div>
+            <div class="contact">
+              <p>
+                <a href="https://github.com/yourusername">github.com/yourusername</a><br />
+                <a href="https://twitter.com/yourusername">twitter.com/yourusername</a><br />
+              </p>
             </div>
           </div>
-        </div> <!-- /container -->
+        </div>
 
-    <!-- build:js({app,.tmp}) /scripts/scripts.js -->
-    <script src="/scripts/main.js"></script>
-    <!-- endbuild -->
     </body>
 </html>
