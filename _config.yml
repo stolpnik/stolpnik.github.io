@@ -16,7 +16,7 @@ author:
 
 # Exclude directories and/or files from the conversion.
 # Grunt moves image files and asset directories.
-exclude: ['images', 'styles', 'scripts', 'fonts',
+exclude: ['images', 'styles', 'scripts', 'fonts', 'app',
           '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
 
 # Force inclusion of directories and/or files in the conversion.
