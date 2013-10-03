@@ -1,3 +1,42 @@
+---
+layout: post
+title: "generator-jekyllrb"
+date: 2013-10-03 13:49:19 +0900
+---
+
+# generator-jekyllrb を使ってみる
+
+## 使いたい理由
+
+- compassを使いたい
+- coffeescriptを使いたい
+- 上２つを自動でコンパイルしてほしい
+- livereload大好き！
+- つまりgrunt.jsを使いたい
+- つうかいちいちGruntfile.jsを書いたり、Gistとかから探してくるのめんどくさい
+- つまりyeomanを使いたい
+
+## generator-jekyllrbとは
+
+web 制作（開発）を行う上でのツールセットである、[yeoman]( http://yeoman.io/ ) のジェネレーター。
+ジェネレーターは、特定の目的に沿ったテンプレートを自動的に生成してくれる yoeman の機能です。
+この場合は Jekyll を使うためのテンプレートを自動的に生成してくれます。
+[generator-jekyllrb]( https://github.com/robwierzbowski/generator-jekyllrb )
+
+## 開発中
+grunt server で coffeescript / compass / html の変更がされるたびに livereload が動作し、対応ブラウザであれば自動で最新の状態が反映されます。
+
+## 通常の website に使用する
+この場合はデフォルトの Gruntfile.js のままで構いません。 grunt build でプロジェクト直下の dist（yeoman.appで指定したディレクトリ） ディレクトリに jekyll でコンテンツが生成されます。
+
+## github pages での使用
+これをメインに考えていました。
+
+Gruntfile.jsを修正します。長いけど貼ってみます。
+
+copy:finish を追加して、usemin を行ったあとの _layout/default.html をプロジェクトルートの _layout にコピーしています。同時にプロジェクトルートに必要なファイルをコピーするようにしました。js / css は最終成果物を、jekyllのファイルに関しては grunt.jsの各ライブラリで行った結果を反映するようになっていると思います。
+
+```js
 // Generated on 2013-10-02 using generator-jekyllrb 0.4.0
 'use strict';
 
@@ -475,3 +514,5 @@ module.exports = function (grunt) {
     'build'
   ]);
 };
+```
+

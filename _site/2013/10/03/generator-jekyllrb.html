@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>generator-jekyllrb</title>
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="/styles/main.css">
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">stolpnik.github.io</a></h1>
+              <a class="extra" href="/">home</a>
+            </div>
+
+                <h2>generator-jekyllrb</h2>
+<p class="meta">03 Oct 2013</p>
+
+<div class="post">
+<h1>generator-jekyllrb を使ってみる</h1>
+
+<h2>使いたい理由</h2>
+
+<ul>
+<li>compassを使いたい</li>
+<li>coffeescriptを使いたい</li>
+<li>上２つを自動でコンパイルしてほしい</li>
+<li>livereload大好き！</li>
+<li>つまりgrunt.jsを使いたい</li>
+<li>つうかいちいちGruntfile.jsを書いたり、Gistとかから探してくるのめんどくさい</li>
+<li>つまりyeomanを使いたい</li>
+</ul>
+
+<h2>generator-jekyllrbとは</h2>
+
+<p>web 制作（開発）を行う上でのツールセットである、<a href="http://yeoman.io/">yeoman</a> のジェネレーター。
+ジェネレーターは、特定の目的に沿ったテンプレートを自動的に生成してくれる yoeman の機能です。
+この場合は Jekyll を使うためのテンプレートを自動的に生成してくれます。
+<a href="https://github.com/robwierzbowski/generator-jekyllrb">generator-jekyllrb</a></p>
+
+<h2>開発中</h2>
+
+<p>grunt server で coffeescript / compass / html の変更がされるたびに livereload が動作し、対応ブラウザであれば自動で最新の状態が反映されます。</p>
+
+<h2>通常の website に使用する</h2>
+
+<p>この場合はデフォルトの Gruntfile.js のままで構いません。 grunt build でプロジェクト直下の dist（yeoman.appで指定したディレクトリ） ディレクトリに jekyll でコンテンツが生成されます。</p>
+
+<h2>github pages での使用</h2>
+
+<p>これをメインに考えていました。</p>
+
+<p>Gruntfile.jsを修正します。長いけど貼ってみます。</p>
+
+<p>copy:finish を追加して、usemin を行ったあとの _layout/default.html をプロジェクトルートの _layout にコピーしています。同時にプロジェクトルートに必要なファイルをコピーするようにしました。js / css は最終成果物を、jekyllのファイルに関しては grunt.jsの各ライブラリで行った結果を反映するようになっていると思います。</p>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">// Generated on 2013-10-02 using generator-jekyllrb 0.4.0</span>
+<span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<span class="c1">// Directory reference:</span>
+<span class="c1">//   css: styles</span>
+<span class="c1">//   compass: _scss</span>
+<span class="c1">//   javascript: scripts</span>
+<span class="c1">//   coffeescript: _src</span>
+<span class="c1">//   images: images</span>
+<span class="c1">//   fonts: fonts</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Show elapsed time after tasks run</span>
+  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;time-grunt&#39;</span><span class="p">)(</span><span class="nx">grunt</span><span class="p">);</span>
+  <span class="c1">// Load all Grunt tasks</span>
+  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;load-grunt-tasks&#39;</span><span class="p">)(</span><span class="nx">grunt</span><span class="p">);</span>
+
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+    <span class="c1">// Configurable paths</span>
+    <span class="nx">yeoman</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">app</span><span class="o">:</span> <span class="s1">&#39;app&#39;</span><span class="p">,</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="s1">&#39;_site&#39;</span>
+    <span class="p">},</span>
+    <span class="nx">watch</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">compass</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;&lt;%= yeoman.app %&gt;/_scss/**/*.{scss,sass}&#39;</span><span class="p">],</span>
+        <span class="nx">tasks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;compass:server&#39;</span><span class="p">,</span> <span class="s1">&#39;autoprefixer:server&#39;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">autoprefixer</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;&lt;%= yeoman.app %&gt;/styles/**/*.css&#39;</span><span class="p">],</span>
+        <span class="nx">tasks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;copy:stageCss&#39;</span><span class="p">,</span> <span class="s1">&#39;autoprefixer:server&#39;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">coffee</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;&lt;%= yeoman.app %&gt;/_src/**/*.coffee&#39;</span><span class="p">],</span>
+        <span class="nx">tasks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;coffee:dist&#39;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">coffeeTest</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;test/spec/**/*.coffee&#39;</span><span class="p">],</span>
+        <span class="nx">tasks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;coffee:test&#39;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">jekyll</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span>
+          <span class="s1">&#39;&lt;%= yeoman.app %&gt;/**/*.{html,yml,md,mkd,markdown}&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;_config.yml&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;!&lt;%= yeoman.app %&gt;/_bower_components&#39;</span>
+        <span class="p">],</span>
+        <span class="nx">tasks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;jekyll:server&#39;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">livereload</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">livereload</span><span class="o">:</span> <span class="s1">&#39;&lt;%= connect.options.livereload %&gt;&#39;</span>
+        <span class="p">},</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span>
+          <span class="s1">&#39;.jekyll/**/*.html&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;.tmp/styles/**/*.css&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;{.tmp,&lt;%= yeoman.app %&gt;}/&lt;%= js %&gt;/**/*.js&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;&lt;%= yeoman.app %&gt;/images/**/*.{gif,jpg,jpeg,png,svg,webp}&#39;</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">connect</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">port</span><span class="o">:</span> <span class="mi">9000</span><span class="p">,</span>
+        <span class="nx">livereload</span><span class="o">:</span> <span class="mi">35729</span><span class="p">,</span>
+        <span class="c1">// change this to &#39;0.0.0.0&#39; to access the server from outside</span>
+        <span class="nx">hostname</span><span class="o">:</span> <span class="s1">&#39;localhost&#39;</span>
+      <span class="p">},</span>
+      <span class="nx">livereload</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">open</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">base</span><span class="o">:</span> <span class="p">[</span>
+            <span class="s1">&#39;.tmp&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;.jekyll&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;%= yeoman.app %&gt;&#39;</span>
+          <span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">open</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">base</span><span class="o">:</span> <span class="p">[</span>
+            <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span>
+          <span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nx">test</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">base</span><span class="o">:</span> <span class="p">[</span>
+            <span class="s1">&#39;.tmp&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;.jekyll&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;test&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;%= yeoman.app %&gt;&#39;</span>
+          <span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">clean</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">dot</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="p">[</span>
+            <span class="s1">&#39;.tmp&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;%= yeoman.dist %&gt;/*&#39;</span><span class="p">,</span>
+            <span class="c1">// Running Jekyll also cleans the target directory.  Exclude any</span>
+            <span class="c1">// non-standard `keep_files` here (e.g., the generated files</span>
+            <span class="c1">// directory from Jekyll Picture Tag).</span>
+            <span class="s1">&#39;!&lt;%= yeoman.dist %&gt;/.git*&#39;</span>
+          <span class="p">]</span>
+        <span class="p">}]</span>
+      <span class="p">},</span>
+      <span class="nx">server</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s1">&#39;.tmp&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;.jekyll&#39;</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nx">compass</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="c1">// If you&#39;re using global Sass gems, require them here.</span>
+        <span class="c1">// require: [&#39;singularity&#39;, &#39;jacket&#39;],</span>
+        <span class="nx">bundleExec</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">sassDir</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.app %&gt;/_scss&#39;</span><span class="p">,</span>
+        <span class="nx">cssDir</span><span class="o">:</span> <span class="s1">&#39;.tmp/styles&#39;</span><span class="p">,</span>
+        <span class="nx">imagesDir</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.app %&gt;/images&#39;</span><span class="p">,</span>
+        <span class="nx">javascriptsDir</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.app %&gt;/scripts&#39;</span><span class="p">,</span>
+        <span class="nx">relativeAssets</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">httpImagesPath</span><span class="o">:</span> <span class="s1">&#39;/images&#39;</span><span class="p">,</span>
+        <span class="nx">httpGeneratedImagesPath</span><span class="o">:</span> <span class="s1">&#39;/images/generated&#39;</span><span class="p">,</span>
+        <span class="nx">outputStyle</span><span class="o">:</span> <span class="s1">&#39;expanded&#39;</span><span class="p">,</span>
+        <span class="nx">raw</span><span class="o">:</span> <span class="s1">&#39;extensions_dir = &quot;&lt;%= yeoman.app %&gt;/_bower_components&quot;\n&#39;</span>
+      <span class="p">},</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">generatedImagesDir</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;/images/generated&#39;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nx">server</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">debugInfo</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">generatedImagesDir</span><span class="o">:</span> <span class="s1">&#39;.tmp/images/generated&#39;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">autoprefixer</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;last 2 versions&#39;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;/styles&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;**/*.css&#39;</span><span class="p">,</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;/styles&#39;</span>
+        <span class="p">}]</span>
+      <span class="p">},</span>
+      <span class="nx">server</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;.tmp/styles&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;**/*.css&#39;</span><span class="p">,</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;.tmp/styles&#39;</span>
+        <span class="p">}]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">coffee</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.app %&gt;/_src&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;**/*.coffee&#39;</span><span class="p">,</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;.tmp/scripts&#39;</span><span class="p">,</span>
+          <span class="nx">ext</span><span class="o">:</span> <span class="s1">&#39;.js&#39;</span>
+        <span class="p">}]</span>
+      <span class="p">},</span>
+      <span class="nx">test</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;test/spec&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;**/*.coffee&#39;</span><span class="p">,</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;.tmp/spec&#39;</span><span class="p">,</span>
+          <span class="nx">ext</span><span class="o">:</span> <span class="s1">&#39;.js&#39;</span>
+        <span class="p">}]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">jekyll</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">bundleExec</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">config</span><span class="o">:</span> <span class="s1">&#39;_config.yml,_config.build.yml&#39;</span><span class="p">,</span>
+        <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.app %&gt;&#39;</span>
+      <span class="p">},</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nx">server</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">config</span><span class="o">:</span> <span class="s1">&#39;_config.yml&#39;</span><span class="p">,</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;.jekyll&#39;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nx">check</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">doctor</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="c1">// UseminPrepare will only scan a single page for usemin blocks. If you</span>
+    <span class="c1">// use usemin blocks that aren&#39;t in index.html, create a usemin manifest</span>
+    <span class="c1">// page (hackery!) and point this task there.</span>
+    <span class="nx">useminPrepare</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span>
+      <span class="p">},</span>
+      <span class="nx">html</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.app %&gt;/_layouts/default.html&#39;</span>
+    <span class="p">},</span>
+    <span class="nx">usemin</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">basedir</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span><span class="p">,</span>
+        <span class="nx">dirs</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;&lt;%= yeoman.dist %&gt;/**/*&#39;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">html</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;&lt;%= yeoman.dist %&gt;/**/*.html&#39;</span><span class="p">],</span>
+      <span class="nx">css</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;&lt;%= yeoman.dist %&gt;/styles/**/*.css&#39;</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nx">htmlmin</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">collapseWhitespace</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">collapseBooleanAttributes</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">removeAttributeQuotes</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">removeRedundantAttributes</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;**/*.html&#39;</span><span class="p">,</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span>
+        <span class="p">}]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="c1">// Usemin adds files to concat</span>
+    <span class="nx">concat</span><span class="o">:</span> <span class="p">{},</span>
+    <span class="c1">// Usemin adds files to uglify</span>
+    <span class="nx">uglify</span><span class="o">:</span> <span class="p">{},</span>
+    <span class="c1">// Usemin adds files to cssmin</span>
+    <span class="nx">cssmin</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;gzip&#39;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">imagemin</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">progressive</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;**/*.{jpg,jpeg,png}&#39;</span><span class="p">,</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span>
+        <span class="p">}]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">svgmin</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;**/*.svg&#39;</span><span class="p">,</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span>
+        <span class="p">}]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">copy</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">dot</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.app %&gt;&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="p">[</span>
+            <span class="c1">// Jekyll processes and moves HTML and text files</span>
+            <span class="c1">// Usemin moves CSS and javascript inside of Usemin blocks</span>
+            <span class="c1">// Copy moves asset files and directories</span>
+            <span class="s1">&#39;images/**/*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fonts/**/*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;_layouts/**/*&#39;</span><span class="c1">//,</span>
+            <span class="c1">// Like Jekyll, exclude files &amp; folders prefixed with an underscore</span>
+            <span class="c1">//&#39;!**/_*{,/**}&#39;</span>
+            <span class="c1">// Explicitly add any files your site needs for distribution here</span>
+            <span class="c1">//&#39;_bower_components/jquery/jquery.js&#39;,</span>
+            <span class="c1">//&#39;favicon.ico&#39;,</span>
+            <span class="c1">//&#39;apple-touch*.png&#39;</span>
+          <span class="p">],</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span>
+        <span class="p">}]</span>
+      <span class="p">},</span>
+      <span class="c1">//</span>
+      <span class="nx">finish</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">dot</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.app %&gt;&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="p">[</span>
+            <span class="c1">// Jekyll processes and moves HTML and text files</span>
+            <span class="c1">// Usemin moves CSS and javascript inside of Usemin blocks</span>
+            <span class="c1">// Copy moves asset files and directories</span>
+            <span class="s1">&#39;images/**/*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fonts/**/*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;index.html&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;_layouts/**/*&#39;</span><span class="p">,</span>
+            <span class="c1">// Like Jekyll, exclude files &amp; folders prefixed with an underscore</span>
+            <span class="c1">//&#39;&lt;%= yeoman.app %&gt;/_*{,/**}&#39;</span>
+            <span class="s1">&#39;_posts/**/*&#39;</span>
+            <span class="c1">// Explicitly add any files your site needs for distribution here</span>
+            <span class="c1">//&#39;_bower_components/jquery/jquery.js&#39;,</span>
+            <span class="c1">//&#39;favicon.ico&#39;,</span>
+            <span class="c1">//&#39;apple-touch*.png&#39;</span>
+          <span class="p">],</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">dot</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.dist %&gt;&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="p">[</span>
+            <span class="c1">// Jekyll processes and moves HTML and text files</span>
+            <span class="c1">// Usemin moves CSS and javascript inside of Usemin blocks</span>
+            <span class="c1">// Copy moves asset files and directories</span>
+            <span class="s1">&#39;scripts/**/*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;styles/**/*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;_layouts/**/*&#39;</span>
+            <span class="c1">// Like Jekyll, exclude files &amp; folders prefixed with an underscore</span>
+            <span class="c1">//&#39;&lt;%= yeoman.app %&gt;/_*{,/**}&#39;</span>
+            <span class="c1">// Explicitly add any files your site needs for distribution here</span>
+            <span class="c1">//&#39;_bower_components/jquery/jquery.js&#39;,</span>
+            <span class="c1">//&#39;favicon.ico&#39;,</span>
+            <span class="c1">//&#39;apple-touch*.png&#39;</span>
+          <span class="p">],</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+        <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="c1">// Copy CSS into .tmp directory for Autoprefixer processing</span>
+      <span class="nx">stageCss</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">dot</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">cwd</span><span class="o">:</span> <span class="s1">&#39;&lt;%= yeoman.app %&gt;/styles&#39;</span><span class="p">,</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;**/*.css&#39;</span><span class="p">,</span>
+          <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;.tmp/styles&#39;</span>
+        <span class="p">}]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">rev</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">length</span><span class="o">:</span> <span class="mi">4</span>
+      <span class="p">},</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">src</span><span class="o">:</span> <span class="p">[</span>
+            <span class="s1">&#39;&lt;%= yeoman.dist %&gt;/scripts/**/*.js&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;%= yeoman.dist %&gt;/styles/**/*.css&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;%= yeoman.dist %&gt;/images/**/*.{gif,jpg,jpeg,png,svg,webp}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;%= yeoman.dist %&gt;/fonts/**/*.{eot*,otf,svg,ttf,woff}&#39;</span>
+          <span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">jshint</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">jshintrc</span><span class="o">:</span> <span class="s1">&#39;.jshintrc&#39;</span>
+      <span class="p">},</span>
+      <span class="nx">all</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s1">&#39;Gruntfile.js&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;&lt;%= yeoman.app %&gt;/scripts/**/*.js&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;test/spec/**/*.js&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;!&lt;%= yeoman.app %&gt;/scripts/vendor/**/*&#39;</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nx">csscss</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">bundleExec</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">minMatch</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="nx">ignoreSassMixins</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">compass</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">colorize</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">shorthand</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span>
+      <span class="p">},</span>
+      <span class="nx">check</span><span class="o">:</span> <span class="p">{</span>
+       <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;&lt;%= yeoman.app %&gt;/styles/**/*.css&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;&lt;%= yeoman.app %&gt;/_scss/**/*.scss&#39;</span><span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">csslint</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">csslintrc</span><span class="o">:</span> <span class="s1">&#39;.csslintrc&#39;</span>
+      <span class="p">},</span>
+      <span class="nx">check</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">src</span><span class="o">:</span> <span class="p">[</span>
+          <span class="s1">&#39;&lt;%= yeoman.app %&gt;}/styles/**/*.css&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;&lt;%= yeoman.app %&gt;}/_scss/**/*.scss&#39;</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">concurrent</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">server</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s1">&#39;compass:server&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;coffee:dist&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;copy:stageCss&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;jekyll:server&#39;</span>
+      <span class="p">],</span>
+      <span class="nx">dist</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s1">&#39;compass:dist&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;coffee:dist&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;copy:dist&#39;</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Define Tasks</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;server&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">target</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">target</span> <span class="o">===</span> <span class="s1">&#39;dist&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">task</span><span class="p">.</span><span class="nx">run</span><span class="p">([</span><span class="s1">&#39;build&#39;</span><span class="p">,</span> <span class="s1">&#39;connect:dist:keepalive&#39;</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">task</span><span class="p">.</span><span class="nx">run</span><span class="p">([</span>
+      <span class="s1">&#39;clean:server&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;concurrent:server&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;autoprefixer:server&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;connect:livereload&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;watch&#39;</span>
+    <span class="p">]);</span>
+  <span class="p">});</span>
+
+  <span class="c1">// No real tests yet. Add your own.</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="p">[</span>
+  <span class="c1">//   &#39;clean:server&#39;,</span>
+  <span class="c1">//   &#39;concurrent:test&#39;,</span>
+  <span class="c1">//   &#39;connect:test&#39;</span>
+  <span class="p">]);</span>
+
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;check&#39;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="s1">&#39;clean:server&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;jekyll:check&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;compass:server&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;coffee:dist&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;jshint:all&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;csscss:check&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;csslint:check&#39;</span>
+  <span class="p">]);</span>
+
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;build&#39;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="s1">&#39;clean:dist&#39;</span><span class="p">,</span>
+    <span class="c1">// Jekyll cleans files from the target directory, so must run first</span>
+    <span class="s1">&#39;jekyll:dist&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;concurrent:dist&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;useminPrepare&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;concat&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;autoprefixer:dist&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;cssmin&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;uglify&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;imagemin&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;svgmin&#39;</span><span class="p">,</span>
+    <span class="c1">//&#39;rev&#39;,</span>
+    <span class="s1">&#39;usemin&#39;</span><span class="p">,</span>
+    <span class="c1">//&#39;htmlmin&#39;</span>
+     <span class="s1">&#39;copy:finish&#39;</span>
+    <span class="p">]);</span>
+
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="s1">&#39;check&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;test&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;build&#39;</span>
+  <span class="p">]);</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+
+
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  stolpnik<br />
+                  <a href="mailto:test@test.com">test@test.com</a>
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  <a href="http://github.com/stolpnik/">github.com/stolpnik</a><br />
+                  <a href="http://twitter.com/orhitsuim/">twitter.com/orhitsuim</a><br />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+    <script src="/scripts/scripts.js"></script>
+    </body>
+</html>

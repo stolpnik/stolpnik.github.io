@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     blankslate (2.1.2.4)
+    chronic (0.10.2)
     chunky_png (1.2.8)
     classifier (1.3.3)
       fast-stemmer (>= 1.0.0)
@@ -47,6 +48,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  chronic
   compass (>= 0.12)
   csscss (~> 1.3)
   jekyll (~> 1.0)
