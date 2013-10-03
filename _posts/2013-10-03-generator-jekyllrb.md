@@ -15,6 +15,7 @@ date: 2013-10-03 13:49:19 +0900
 - つまりgrunt.jsを使いたい
 - つうかいちいちGruntfile.jsを書いたり、Gistとかから探してくるのめんどくさい
 - つまりyeomanを使いたい
+- できたら github pages で使えるようにしたい
 
 ## generator-jekyllrbとは
 

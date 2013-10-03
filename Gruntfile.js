@@ -40,8 +40,9 @@ module.exports = function (grunt) {
       },
       jekyll: {
         files: [
+          '_posts/**/*.{html,yml,md,mkd,markdown}',
           '<%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}',
-          '_config.yml',
+          '_config.app.yml',
           '!<%= yeoman.app %>/_bower_components'
         ],
         tasks: ['jekyll:server']
@@ -194,7 +195,7 @@ module.exports = function (grunt) {
       },
       server: {
         options: {
-          config: '_config.yml',
+          config: '_config.app.yml',
           dest: '.jekyll'
         }
       },
@@ -308,10 +309,10 @@ module.exports = function (grunt) {
             'images/**/*',
             'fonts/**/*',
             'index.html',
-             '_layouts/**/*',
+             '_layouts/**/*'
             // Like Jekyll, exclude files & folders prefixed with an underscore
             //'<%= yeoman.app %>/_*{,/**}'
-            '_posts/**/*'
+            //'_posts/**/*'
             // Explicitly add any files your site needs for distribution here
             //'_bower_components/jquery/jquery.js',
             //'favicon.ico',
